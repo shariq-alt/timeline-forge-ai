@@ -1,8 +1,8 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import { supabase } from '@/types/supabaseTypes';
 
 interface User {
   id: string;
@@ -21,7 +21,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
 }
 
-interface RegisterData {
+export interface RegisterData {
   fname: string;
   lname: string;
   username: string;

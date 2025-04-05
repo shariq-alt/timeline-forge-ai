@@ -1,5 +1,5 @@
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/types/supabaseTypes';
 import { Timeline, TimelineSegment, Goal } from '@/types';
 
 export type CreateTimelineDto = {

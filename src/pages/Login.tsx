@@ -18,6 +18,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { RegisterData } from '@/modules/auth/AuthContext';
 
 const loginSchema = z.object({
   email: z.string().email({
@@ -85,7 +86,15 @@ const Login = () => {
   };
 
   const onRegisterSubmit = async (values: RegisterFormValues) => {
-    await registerUser(values);
+    // Ensure values matches RegisterData type
+    const registerData: RegisterData = {
+      fname: values.fname,
+      lname: values.lname,
+      username: values.username,
+      email: values.email,
+      password: values.password
+    };
+    await registerUser(registerData);
   };
 
   return (
