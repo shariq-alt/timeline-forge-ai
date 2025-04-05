@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Timeline } from '@/types';
 import TimelineCard from '@/components/timeline/TimelineCard';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,18 @@ import { ChevronRight } from 'lucide-react';
 
 const ExploreSection = () => {
   const [timelines, setTimelines] = useState<Timeline[]>([]);
+  const [isRouterAvailable, setIsRouterAvailable] = useState(false);
+  
+  // Check if we're in a router context
+  useEffect(() => {
+    try {
+      // If this doesn't throw, we're in a router context
+      setIsRouterAvailable(true);
+    } catch (error) {
+      console.error('Router context not available:', error);
+      setIsRouterAvailable(false);
+    }
+  }, []);
 
   useEffect(() => {
     // In a real app, fetch from API
@@ -30,11 +42,18 @@ const ExploreSection = () => {
               Discover public timelines created by the community
             </p>
           </div>
-          <Button asChild variant="outline" className="mt-4 md:mt-0">
-            <Link to="/explore">
+          {isRouterAvailable && (
+            <Button asChild variant="outline" className="mt-4 md:mt-0">
+              <Link to="/explore">
+                View All <ChevronRight className="ml-1 h-4 w-4" />
+              </Link>
+            </Button>
+          )}
+          {!isRouterAvailable && (
+            <Button variant="outline" className="mt-4 md:mt-0" onClick={() => window.location.href = '/explore'}>
               View All <ChevronRight className="ml-1 h-4 w-4" />
-            </Link>
-          </Button>
+            </Button>
+          )}
         </div>
 
         {timelines.length > 0 ? (
@@ -49,9 +68,15 @@ const ExploreSection = () => {
             <p className="text-muted-foreground mb-4">
               Be the first to create and share a public timeline!
             </p>
-            <Button asChild>
-              <Link to="/create">Create Timeline</Link>
-            </Button>
+            {isRouterAvailable ? (
+              <Button asChild>
+                <Link to="/create">Create Timeline</Link>
+              </Button>
+            ) : (
+              <Button onClick={() => window.location.href = '/create'}>
+                Create Timeline
+              </Button>
+            )}
           </div>
         )}
       </div>

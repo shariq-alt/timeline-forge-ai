@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, Users } from 'lucide-react';
 import { Timeline, TimelineType } from '@/types';
@@ -28,6 +28,18 @@ interface TimelineCardProps {
 
 const TimelineCard = ({ timeline }: TimelineCardProps) => {
   const { id, title, description, type, segments, isPublic, createdAt } = timeline;
+  const [isRouterAvailable, setIsRouterAvailable] = useState(false);
+  
+  // Check if we're in a router context
+  useEffect(() => {
+    try {
+      // If this doesn't throw, we're in a router context
+      setIsRouterAvailable(true);
+    } catch (error) {
+      console.error('Router context not available:', error);
+      setIsRouterAvailable(false);
+    }
+  }, []);
   
   // Format the date
   const formattedDate = new Date(createdAt).toLocaleDateString('en-US', {
@@ -48,9 +60,15 @@ const TimelineCard = ({ timeline }: TimelineCardProps) => {
             </div>
           )}
         </div>
-        <Link to={`/timeline/${id}`} className="hover:underline">
-          <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
-        </Link>
+        {isRouterAvailable ? (
+          <Link to={`/timeline/${id}`} className="hover:underline">
+            <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
+          </Link>
+        ) : (
+          <a href={`/timeline/${id}`} className="hover:underline">
+            <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
+          </a>
+        )}
       </CardHeader>
       <CardContent className="flex-grow">
         <p className="text-muted-foreground text-sm line-clamp-3">{description || "No description provided."}</p>

@@ -1,10 +1,23 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Calendar, Clock, ChevronRight } from 'lucide-react';
 
 const HeroSection = () => {
+  const [isRouterAvailable, setIsRouterAvailable] = useState(false);
+  
+  // Check if we're in a router context
+  useEffect(() => {
+    try {
+      // If this doesn't throw, we're in a router context
+      setIsRouterAvailable(true);
+    } catch (error) {
+      console.error('Router context not available:', error);
+      setIsRouterAvailable(false);
+    }
+  }, []);
+
   return (
     <div className="relative bg-accent overflow-hidden">
       <div className="absolute inset-0 z-0 opacity-30">
@@ -29,16 +42,29 @@ const HeroSection = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <Button asChild size="lg">
-                <Link to="/create">
-                  Create Timeline <ChevronRight className="ml-1 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <Link to="/explore">
-                  Explore Timelines
-                </Link>
-              </Button>
+              {isRouterAvailable ? (
+                <>
+                  <Button asChild size="lg">
+                    <Link to="/create">
+                      Create Timeline <ChevronRight className="ml-1 h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg">
+                    <Link to="/explore">
+                      Explore Timelines
+                    </Link>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button size="lg" onClick={() => window.location.href = '/create'}>
+                    Create Timeline <ChevronRight className="ml-1 h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="lg" onClick={() => window.location.href = '/explore'}>
+                    Explore Timelines
+                  </Button>
+                </>
+              )}
             </div>
           </div>
           
