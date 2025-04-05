@@ -37,7 +37,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  // Handle authentication state changes
   useEffect(() => {
+    // Check for URL fragments that might contain error messages from Supabase auth
+    const handleAuthErrors = () => {
+      const hash = window.location.hash;
+      if (hash && hash.includes('error=')) {
+        const params = new URLSearchParams(hash.substring(1));
+        const errorDesc = params.get('error_description');
+        if (errorDesc) {
+          toast({
+            title: 'Authentication Error',
+            description: decodeURIComponent(errorDesc.replace(/\+/g, ' ')),
+            variant: 'destructive',
+          });
+          // Clear the URL hash
+          window.history.replaceState(null, '', window.location.pathname);
+        }
+      }
+    };
+
+    handleAuthErrors();
+
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
@@ -64,7 +85,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [navigate]);
 
   const fetchUserProfile = async (userId: string) => {
     try {
@@ -147,6 +168,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             lname: data.lname,
             username: data.username,
           },
+          // Specify the redirect URL for email confirmation
+          emailRedirectTo: window.location.origin,
         },
       });
       
