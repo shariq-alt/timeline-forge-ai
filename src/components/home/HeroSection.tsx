@@ -27,7 +27,7 @@ const HeroSection = () => {
       <div className="container relative z-10 py-16 md:py-24 px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div className="space-y-6 text-center md:text-left">
-            <div className="inline-block bg-primary/20 px-3 py-1 rounded-full text-sm font-medium text-primary-foreground">
+            <div className="inline-block bg-primary/40 px-3 py-1.5 rounded-full text-sm font-medium text-foreground">
               Organize your path with ease
             </div>
 
@@ -44,12 +44,12 @@ const HeroSection = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
               {isRouterAvailable ? (
                 <>
-                  <Button asChild size="lg">
+                  <Button asChild size="lg" className="transition-all duration-300 hover:scale-105">
                     <Link to="/create">
                       Create Timeline <ChevronRight className="ml-1 h-4 w-4" />
                     </Link>
                   </Button>
-                  <Button asChild variant="outline" size="lg">
+                  <Button asChild variant="outline" size="lg" className="transition-all duration-300 hover:bg-accent hover:text-accent-foreground">
                     <Link to="/explore">
                       Explore Timelines
                     </Link>
@@ -57,10 +57,10 @@ const HeroSection = () => {
                 </>
               ) : (
                 <>
-                  <Button size="lg" onClick={() => window.location.href = '/create'}>
+                  <Button size="lg" onClick={() => window.location.href = '/create'} className="transition-all duration-300 hover:scale-105">
                     Create Timeline <ChevronRight className="ml-1 h-4 w-4" />
                   </Button>
-                  <Button variant="outline" size="lg" onClick={() => window.location.href = '/explore'}>
+                  <Button variant="outline" size="lg" onClick={() => window.location.href = '/explore'} className="transition-all duration-300 hover:bg-accent hover:text-accent-foreground">
                     Explore Timelines
                   </Button>
                 </>
@@ -70,10 +70,13 @@ const HeroSection = () => {
           
           <div className="hidden md:flex justify-center">
             <div className="relative w-full max-w-md">
-              <div className="absolute -top-6 -left-6 bg-primary/20 rounded-lg p-6 shadow-sm">
-                <Calendar className="h-12 w-12 text-primary" />
+              {/* Calendar icon positioned at top-left of card */}
+              <div className="absolute -top-6 -left-6 bg-primary/30 rounded-lg p-5 shadow-md z-10">
+                <Calendar className="h-10 w-10 text-primary" />
               </div>
-              <div className="bg-card rounded-lg p-6 shadow-lg">
+              
+              {/* Main timeline card mockup */}
+              <div className="bg-card relative rounded-lg p-6 shadow-lg z-0">
                 <div className="space-y-2 mb-4">
                   <div className="h-6 bg-accent rounded-md w-3/4"></div>
                   <div className="h-4 bg-accent/70 rounded-md w-1/2"></div>
@@ -86,8 +89,10 @@ const HeroSection = () => {
                   <div className="timeline-segment h-12 w-full bg-accent/50 rounded-md"></div>
                 </div>
               </div>
-              <div className="absolute -bottom-6 -right-6 bg-primary/20 rounded-lg p-6 shadow-sm">
-                <Clock className="h-12 w-12 text-primary" />
+              
+              {/* Clock icon positioned at bottom-right of card */}
+              <div className="absolute -bottom-6 -right-6 bg-primary/30 rounded-lg p-5 shadow-md z-10">
+                <Clock className="h-10 w-10 text-primary" />
               </div>
             </div>
           </div>
